@@ -1,3 +1,6 @@
+/* Import Google Font (Montserrat) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
 /* Reset & Basic Styles */
 * {
   margin: 0;
@@ -8,13 +11,7 @@
 html, body {
   width: 100%;
   height: 100%;
-  font-family: Arial, sans-serif;
-}
-
-/* Background styling for a website feel */
-body {
-  /* You can use a background image by uncommenting the next line */
-  /* background: url('./assets/background.jpg') no-repeat center center/cover; */
+  font-family: 'Montserrat', sans-serif;
   background: linear-gradient(135deg, #f6f9fc, #e9eff5);
 }
 
@@ -29,23 +26,43 @@ body {
   position: fixed;
   width: 100%;
   top: 0;
-  z-index: 10;
+  z-index: 100;
 }
 
 #site-header h1 {
   font-size: 1.8em;
+  font-weight: 600;
 }
 
 #site-header nav a {
   margin-left: 20px;
   text-decoration: none;
   color: #333;
-  font-weight: bold;
+  font-weight: 600;
 }
 
-/* Product Panel: Left, vertically centered */
+/* HOME VIEW (Single Carpet) */
+#home-view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-top: 70px; /* space for fixed header */
+}
+
+/* The big canvas behind the UI */
+#home-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+/* Product Panel (left side) */
 #product-panel {
-  position: fixed;
+  position: absolute;
   left: 5%;
   top: 50%;
   transform: translateY(-50%);
@@ -61,6 +78,7 @@ body {
 #product-title {
   font-size: 1.8em;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 #texture-details {
@@ -76,11 +94,12 @@ body {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  font-weight: 600;
 }
 
-/* UI Buttons: bottom center */
+/* UI Buttons (bottom center) */
 #ui {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
@@ -95,25 +114,58 @@ body {
   cursor: pointer;
   margin: 5px;
   border-radius: 5px;
+  font-weight: 600;
 }
 
-/* Footer Styles */
-#site-footer {
-  background: rgba(255, 255, 255, 0.95);
+/* PRODUCTS VIEW (Four Smaller Carpets) */
+#products-view {
+  padding-top: 80px; /* space for fixed header */
   text-align: center;
-  padding: 15px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 10;
 }
 
-/* 3D Canvas Styling */
-canvas {
+/* Title */
+#products-view h2 {
+  font-size: 1.8em;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Row of carpets (flex layout) */
+#carpet-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 20px;
+}
+
+/* Each carpet card */
+.carpet-card {
+  background: rgba(255, 255, 255, 0.95);
+  width: 220px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Canvas for each small carpet */
+.carpet-canvas {
+  width: 220px;
+  height: 220px;
+  background: #ccc; /* fallback background while loading */
   display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
+  margin: 0 auto;
+}
+
+.carpet-card h3 {
+  margin-top: 10px;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.carpet-card p {
+  margin-top: 5px;
+  font-size: 0.9em;
+  line-height: 1.3em;
 }

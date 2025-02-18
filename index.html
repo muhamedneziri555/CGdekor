@@ -3,44 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CGdekor - 3D Carpet Viewer</title>
+  <title>DEKOR CARPET</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <!-- Header -->
   <header id="site-header">
-    <h1>CGdekor</h1>
+    <h1>DEKOR CARPET</h1>
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Products</a>
+      <!-- "Home" shows the single-carpet view -->
+      <a href="#" onclick="showHome()">Home</a>
+      <!-- "Products" shows the four-carpets view -->
+      <a href="#" onclick="showProducts()">Products</a>
       <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
   </header>
-  
-  <!-- Product Details Panel (Left Side) -->
-  <div id="product-panel">
-    <h1 id="product-title">Luna Carpet</h1>
-    <!-- Text that changes when different carpets or colors are selected -->
-    <p id="texture-details">Select a carpet or color to view details.</p>
-    <!-- Add to Cart button -->
-    <button id="add-to-cart">Add to Cart</button>
-  </div>
-  
-  <!-- UI Buttons (Bottom Center) -->
-  <div id="ui">
-    <button onclick="changeTexture(1)">Carpet 1</button>
-    <button onclick="changeTexture(2)">Carpet 2</button>
-    <button onclick="changeTexture(3)">Carpet 3</button>
-    <button onclick="changeColor('#ff0000')">Red Carpet</button>
-  </div>
-  
-  <!-- Footer -->
-  <footer id="site-footer">
-    <p>&copy; 2023 CGdekor. All rights reserved.</p>
-  </footer>
-  
-  <!-- Three.js Script -->
-  <script type="module" src="./main.js"></script>
+
+  <!-- HOME VIEW (Single Carpet) - visible by default -->
+  <section id="home-view">
+    <!-- Large, full-page canvas behind UI -->
+    <canvas id="home-canvas"></canvas>
+
+    <!-- Product Panel (left side) -->
+    <div id="product-panel">
+      <h1 id="product-title">Luna Carpet</h1>
+      <p id="texture-details">Select a carpet or color to view details.</p>
+      <button id="add-to-cart">Add to Cart</button>
+    </div>
+
+    <!-- UI Buttons (bottom center) -->
+    <div id="ui">
+      <button onclick="changeTexture(1)">Carpet 1</button>
+      <button onclick="changeTexture(2)">Carpet 2</button>
+      <button onclick="changeTexture(3)">Carpet 3</button>
+      <button onclick="changeColor('#ff0000')">Red Carpet</button>
+    </div>
+  </section>
+
+  <!-- PRODUCTS VIEW (Four Smaller Carpets) - hidden by default -->
+  <section id="products-view" style="display: none;">
+    <h2>Our Carpets</h2>
+    <div id="carpet-row">
+      <!-- Carpet Card 1 -->
+      <div class="carpet-card">
+        <canvas id="carpetCanvas1" class="carpet-canvas"></canvas>
+        <h3>Carpet 1</h3>
+        <p>Dimensions: 1.50 x 2.20 m<br/>Material: Polyester</p>
+      </div>
+      <!-- Carpet Card 2 -->
+      <div class="carpet-card">
+        <canvas id="carpetCanvas2" class="carpet-canvas"></canvas>
+        <h3>Carpet 2</h3>
+        <p>Dimensions: 2.00 x 3.00 m<br/>Material: Cotton</p>
+      </div>
+      <!-- Carpet Card 3 -->
+      <div class="carpet-card">
+        <canvas id="carpetCanvas3" class="carpet-canvas"></canvas>
+        <h3>Carpet 3</h3>
+        <p>Dimensions: 1.75 x 2.50 m<br/>Material: Wool</p>
+      </div>
+      <!-- Carpet Card 4 -->
+      <div class="carpet-card">
+        <canvas id="carpetCanvas4" class="carpet-canvas"></canvas>
+        <h3>Carpet 4</h3>
+        <p>Dimensions: 1.60 x 2.30 m<br/>Material: Synthetic</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main JS -->
+  <script type="module" src="main.js"></script>
 </body>
 </html>
