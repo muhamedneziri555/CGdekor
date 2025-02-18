@@ -25,20 +25,19 @@ scene.add(light);
 // --- Load Textures ---
 const textureLoader = new THREE.TextureLoader();
 const textures = [
-  textureLoader.load('./assets/Doormate_metallicRoughness.png'),
-  textureLoader.load('./assets/Doormate_baseColor.png'),
-  textureLoader.load('./assets/Doormate_normal.png')
+  textureLoader.load('./assets/Doormate_metallicRoughness.png'), // Texture 1
+  textureLoader.load('./assets/Doormate_baseColor.png'),         // Texture 2
+  textureLoader.load('./assets/Doormate_normal.png')             // Texture 3
 ];
 
-// --- Load Carpet Model using OBJLoader ---
+// --- Load Carpet Model (OBJ) ---
 const objLoader = new OBJLoader();
 let carpet;
 objLoader.load('./assets/Doormate.obj', (object) => {
   carpet = object;
   carpet.scale.set(3, 3, 3);
-  carpet.position.set(0, 0, 0);
   
-  // Apply a default MeshStandardMaterial with the first texture.
+  // Default: use Texture 1
   carpet.traverse((child) => {
     if (child.isMesh) {
       child.material = new THREE.MeshStandardMaterial({
@@ -56,32 +55,68 @@ objLoader.load('./assets/Doormate.obj', (object) => {
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-// --- Functions to Change Texture & Color ---
-// Change texture based on button press (index: 1, 2, or 3)
+// --- changeTexture: Switch among the 3 textures ---
 function changeTexture(index) {
-  if (carpet) {
-    carpet.traverse((child) => {
-      if (child.isMesh && child.material) {
-        child.material.map = textures[index - 1];
-        child.material.needsUpdate = true;
+  if (!carpet) return;
+
+  carpet.traverse((child) => {
+    if (child.isMesh && child.material) {
+      child.material.map = textures[index - 1];
+      child.material.needsUpdate = true;
+      // If we used a color from "Red Color," reset it to white so the texture is unaltered
+      child.material.color.set(0xffffff);
+    }
+  });
+
+  // Update the product panel text based on the chosen texture
+  const detailsEl = document.getElementById('texture-details');
+  switch (index) {
+    case 1:
+      // For Texture 1
+      if (detailsEl) {
+        detailsEl.textContent = "Dimensions: 1.50 x 2.20 m, Material: Polyester";
       }
-    });
+      break;
+    case 2:
+      // For Texture 2
+      if (detailsEl) {
+        detailsEl.textContent = "Dimensions: 2.00 x 3.00 m, Material: Cotton";
+      }
+      break;
+    case 3:
+      // For Texture 3
+      if (detailsEl) {
+        detailsEl.textContent = "Dimensions: 1.75 x 2.50 m, Material: Wool";
+      }
+      break;
+    default:
+      if (detailsEl) {
+        detailsEl.textContent = "";
+      }
   }
 }
 
-// Change the material's base color (e.g., "#ff0000" for red)
+// --- changeColor: If "Red Color" is pressed ---
 function changeColor(colorValue) {
-  if (carpet) {
-    carpet.traverse((child) => {
-      if (child.isMesh && child.material) {
-        child.material.color.set(colorValue);
-        child.material.needsUpdate = true;
-      }
-    });
+  if (!carpet) return;
+
+  carpet.traverse((child) => {
+    if (child.isMesh && child.material) {
+      // Remove any texture map for a pure color
+      child.material.map = null;
+      child.material.color.set(colorValue);
+      child.material.needsUpdate = true;
+    }
+  });
+
+  // Update text to reflect a "red color" finish
+  const detailsEl = document.getElementById('texture-details');
+  if (detailsEl) {
+    detailsEl.textContent = "Dimensions: 1.60 x 2.30 m, Material: Polyester (Red Finish)";
   }
 }
 
-// Expose functions globally for UI usage
+// Expose functions globally
 window.changeTexture = changeTexture;
 window.changeColor = changeColor;
 
@@ -99,3 +134,11 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 });
+
+// --- Add to Cart Button ---
+const addToCartBtn = document.getElementById('add-to-cart');
+if (addToCartBtn) {
+  addToCartBtn.addEventListener('click', () => {
+    alert('Carpet added to cart!');
+  });
+}

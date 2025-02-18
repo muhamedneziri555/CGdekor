@@ -2,17 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CGdekor - 3D Carpet Viewer</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+
+  <!-- Product Details Panel (Left) -->
+  <div id="product-panel">
+    <h1 id="product-title">3D Carpet Viewer</h1>
+    <!-- Text that changes when different textures are selected -->
+    <p id="texture-details">Select a texture or color to view details.</p>
+    <!-- Add to Cart button -->
+    <button id="add-to-cart">Add to Cart</button>
+  </div>
+
+  <!-- Buttons for switching textures/colors -->
   <div id="ui">
     <button onclick="changeTexture(1)">Texture 1</button>
     <button onclick="changeTexture(2)">Texture 2</button>
     <button onclick="changeTexture(3)">Texture 3</button>
     <button onclick="changeColor('#ff0000')">Red Color</button>
   </div>
+
+  <!-- Three.js Script -->
   <script type="module" src="./main.js"></script>
 </body>
 </html>
