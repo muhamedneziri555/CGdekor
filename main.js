@@ -25,9 +25,9 @@ scene.add(light);
 // --- Load Textures ---
 const textureLoader = new THREE.TextureLoader();
 const textures = [
-  textureLoader.load('./assets/Doormate_metallicRoughness.png'), // Texture 1
-  textureLoader.load('./assets/Doormate_baseColor.png'),         // Texture 2
-  textureLoader.load('./assets/Doormate_normal.png')             // Texture 3
+  textureLoader.load('./assets/Doormate_metallicRoughness.png'), // Carpet 1
+  textureLoader.load('./assets/Doormate_baseColor.png'),         // Carpet 2
+  textureLoader.load('./assets/Doormate_normal.png')             // Carpet 3
 ];
 
 // --- Load Carpet Model (OBJ) ---
@@ -37,7 +37,7 @@ objLoader.load('./assets/Doormate.obj', (object) => {
   carpet = object;
   carpet.scale.set(3, 3, 3);
   
-  // Default: use Texture 1
+  // Default: use Carpet 1 (textures[0])
   carpet.traverse((child) => {
     if (child.isMesh) {
       child.material = new THREE.MeshStandardMaterial({
@@ -55,38 +55,39 @@ objLoader.load('./assets/Doormate.obj', (object) => {
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-// --- changeTexture: Switch among the 3 textures ---
+// --- changeTexture: Switch among the 3 carpets ---
 function changeTexture(index) {
   if (!carpet) return;
 
   carpet.traverse((child) => {
     if (child.isMesh && child.material) {
+      // Apply the selected texture
       child.material.map = textures[index - 1];
       child.material.needsUpdate = true;
-      // If we used a color from "Red Color," reset it to white so the texture is unaltered
+      // Reset color to white (so the texture is visible)
       child.material.color.set(0xffffff);
     }
   });
 
-  // Update the product panel text based on the chosen texture
+  // Update the product panel text based on the chosen carpet
   const detailsEl = document.getElementById('texture-details');
   switch (index) {
     case 1:
-      // For Texture 1
+      // Carpet 1
       if (detailsEl) {
-        detailsEl.textContent = "Dimensions: 1.50 x 2.20 m, Material: Polyester";
+        detailsEl.textContent = "Carpet 1: Dimensions: 1.50 x 2.20 m, Material: Polyester";
       }
       break;
     case 2:
-      // For Texture 2
+      // Carpet 2
       if (detailsEl) {
-        detailsEl.textContent = "Dimensions: 2.00 x 3.00 m, Material: Cotton";
+        detailsEl.textContent = "Carpet 2: Dimensions: 2.00 x 3.00 m, Material: Cotton";
       }
       break;
     case 3:
-      // For Texture 3
+      // Carpet 3
       if (detailsEl) {
-        detailsEl.textContent = "Dimensions: 1.75 x 2.50 m, Material: Wool";
+        detailsEl.textContent = "Carpet 3: Dimensions: 1.75 x 2.50 m, Material: Wool";
       }
       break;
     default:
@@ -96,23 +97,23 @@ function changeTexture(index) {
   }
 }
 
-// --- changeColor: If "Red Color" is pressed ---
+// --- changeColor: If "Red Carpet" is pressed ---
 function changeColor(colorValue) {
   if (!carpet) return;
 
   carpet.traverse((child) => {
     if (child.isMesh && child.material) {
-      // Remove any texture map for a pure color
+      // Remove any texture map
       child.material.map = null;
       child.material.color.set(colorValue);
       child.material.needsUpdate = true;
     }
   });
 
-  // Update text to reflect a "red color" finish
+  // Update text to reflect a "Red Carpet"
   const detailsEl = document.getElementById('texture-details');
   if (detailsEl) {
-    detailsEl.textContent = "Dimensions: 1.60 x 2.30 m, Material: Polyester (Red Finish)";
+    detailsEl.textContent = "Red Carpet: Dimensions: 1.60 x 2.30 m, Material: Polyester (Red Finish)";
   }
 }
 
