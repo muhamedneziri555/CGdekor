@@ -7,8 +7,18 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-
-  <!-- Product Details Panel (Left) -->
+  <!-- Header -->
+  <header id="site-header">
+    <h1>CGdekor</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Products</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+  
+  <!-- Product Details Panel (Left Side) -->
   <div id="product-panel">
     <h1 id="product-title">Luna Carpet</h1>
     <!-- Text that changes when different carpets or colors are selected -->
@@ -16,15 +26,20 @@
     <!-- Add to Cart button -->
     <button id="add-to-cart">Add to Cart</button>
   </div>
-
-  <!-- Buttons for switching carpets/colors -->
+  
+  <!-- UI Buttons (Bottom Center) -->
   <div id="ui">
     <button onclick="changeTexture(1)">Carpet 1</button>
     <button onclick="changeTexture(2)">Carpet 2</button>
     <button onclick="changeTexture(3)">Carpet 3</button>
     <button onclick="changeColor('#ff0000')">Red Carpet</button>
   </div>
-
+  
+  <!-- Footer -->
+  <footer id="site-footer">
+    <p>&copy; 2023 CGdekor. All rights reserved.</p>
+  </footer>
+  
   <!-- Three.js Script -->
   <script type="module" src="./main.js"></script>
 </body>

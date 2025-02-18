@@ -1,65 +1,119 @@
 /* Reset & Basic Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  html, body {
-    width: 100%;
-    height: 100%;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Product Panel: Left, vertically centered */
-  #product-panel {
-    position: absolute;
-    left: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.85);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  #product-title {
-    font-size: 1.8em;
-    margin-bottom: 10px;
-  }
-  
-  #texture-details {
-    font-size: 1em;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  #add-to-cart {
-    padding: 10px 15px;
-    background: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  /* UI Buttons: bottom center */
-  #ui {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  #ui button {
-    padding: 10px 15px;
-    background: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 5px;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Background styling for a website feel */
+body {
+  /* You can use a background image by uncommenting the next line */
+  /* background: url('./assets/background.jpg') no-repeat center center/cover; */
+  background: linear-gradient(135deg, #f6f9fc, #e9eff5);
+}
+
+/* Header Styles */
+#site-header {
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+}
+
+#site-header h1 {
+  font-size: 1.8em;
+}
+
+#site-header nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Product Panel: Left, vertically centered */
+#product-panel {
+  position: fixed;
+  left: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+#product-title {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+#texture-details {
+  font-size: 1em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+#add-to-cart {
+  padding: 10px 15px;
+  background: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* UI Buttons: bottom center */
+#ui {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+#ui button {
+  padding: 10px 15px;
+  background: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+/* Footer Styles */
+#site-footer {
+  background: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  padding: 15px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* 3D Canvas Styling */
+canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
