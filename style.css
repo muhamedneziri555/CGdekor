@@ -49,7 +49,7 @@ html, body {
   padding-top: 70px; /* space for fixed header */
 }
 
-/* The big canvas behind the UI */
+/* Full-page canvas behind UI */
 #home-canvas {
   position: absolute;
   top: 0;
@@ -123,7 +123,6 @@ html, body {
   text-align: center;
 }
 
-/* Title */
 #products-view h2 {
   font-size: 1.8em;
   font-weight: 600;
@@ -153,7 +152,7 @@ html, body {
 .carpet-canvas {
   width: 220px;
   height: 220px;
-  background: #ccc; /* fallback background while loading */
+  background: #ccc; /* fallback background */
   display: block;
   margin: 0 auto;
 }

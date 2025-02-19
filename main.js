@@ -3,7 +3,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 /* -------------------------------------------------
-   TEXTURES (adjust paths to your actual files)
+   TEXTURES (Update paths as needed)
 ---------------------------------------------------*/
 const textureLoader = new THREE.TextureLoader();
 const TEXTURES = [
@@ -14,49 +14,55 @@ const TEXTURES = [
 ];
 
 /* -------------------------------------------------
-   1) HOME PAGE (Single Carpet) 
-   - One scene/camera, big full-page canvas (#home-canvas)
+   1) HOME PAGE (Single Carpet)
 ---------------------------------------------------*/
 let homeScene, homeCamera, homeRenderer, homeControls;
 let singleCarpet = null;
 
-// Initialize Single-Carpet Scene
 function initHomeScene() {
   console.log("Initializing home scene...");
   const canvas = document.getElementById('home-canvas');
   homeScene = new THREE.Scene();
-
-  // Camera
-  homeCamera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-  // Position it so the carpet isn't huge
-  homeCamera.position.set(1, 3, 5);
-
-  // Renderer
+  
+  // Home camera
+  homeCamera = new THREE.PerspectiveCamera(
+    75,
+    canvas.clientWidth / canvas.clientHeight,
+    0.1,
+    1000
+  );
+  // Position the camera so the model appears properly sized
+  homeCamera.position.set(0, 3, 10);
+  
   homeRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   homeRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-  // Orbit Controls
+  
   homeControls = new OrbitControls(homeCamera, canvas);
   homeControls.enableDamping = true;
   homeControls.minDistance = 70;
   homeControls.maxDistance = 100;
-
-  // Lighting
+  
+  // Lighting for home scene
   const dirLight = new THREE.DirectionalLight(0xffffff, 2);
   dirLight.position.set(2, 2, 2);
   homeScene.add(dirLight);
-
-  // Load OBJ
+  
   const loader = new OBJLoader();
   loader.load(
     './assets/Doormate.obj',
     (obj) => {
       console.log("Home OBJ loaded successfully.");
       singleCarpet = obj;
-      // Scale so it appears normal
+      
+      // Center the model using its bounding box
+      const box = new THREE.Box3().setFromObject(singleCarpet);
+      const center = box.getCenter(new THREE.Vector3());
+      singleCarpet.position.sub(center);
+      
+      // Adjust scale for home view
       singleCarpet.scale.set(3, 3, 3);
-
-      // Default texture is TEXTURES[0]
+      
+      // Apply default texture (Carpet 1)
       singleCarpet.traverse((child) => {
         if (child.isMesh) {
           child.material = new THREE.MeshStandardMaterial({
@@ -65,7 +71,7 @@ function initHomeScene() {
           });
         }
       });
-
+      
       homeScene.add(singleCarpet);
     },
     undefined,
@@ -75,7 +81,7 @@ function initHomeScene() {
   );
 }
 
-/* Change texture (single carpet) */
+/* Change texture (for home view) */
 window.changeTexture = function(index) {
   if (!singleCarpet) return;
   singleCarpet.traverse((child) => {
@@ -85,8 +91,6 @@ window.changeTexture = function(index) {
       child.material.needsUpdate = true;
     }
   });
-
-  // Update text
   const detailsEl = document.getElementById('texture-details');
   if (!detailsEl) return;
   switch (index) {
@@ -104,12 +108,11 @@ window.changeTexture = function(index) {
   }
 };
 
-/* Change color (single carpet) */
 window.changeColor = function(colorValue) {
   if (!singleCarpet) return;
   singleCarpet.traverse((child) => {
     if (child.isMesh && child.material) {
-      child.material.map = null; // remove texture
+      child.material.map = null;
       child.material.color.set(colorValue);
       child.material.needsUpdate = true;
     }
@@ -121,11 +124,9 @@ window.changeColor = function(colorValue) {
 };
 
 /* -------------------------------------------------
-   2) PRODUCTS PAGE (4 Smaller Carpets in a Row)
-   - 4 Scenes/Cameras, each bound to a <canvas> 
-     (#carpetCanvas1 ... #carpetCanvas4)
+   2) PRODUCTS PAGE (4 Smaller Carpets)
 ---------------------------------------------------*/
-const multiViewers = []; // store 4 viewers
+const multiViewers = []; // Array to store each product viewer
 
 function initProductsScene() {
   console.log("Initializing products scene...");
@@ -134,59 +135,58 @@ function initProductsScene() {
   }
 }
 
-// Create a single "viewer" for the i-th carpet
 function createCarpetViewer(i) {
   const canvas = document.getElementById(`carpetCanvas${i}`);
   if (!canvas) return;
-
-  // Scene
+  
   const scene = new THREE.Scene();
-
-  // Camera
-  // narrower FOV for a 220x220 canvas
+  
+  // Adjusted camera for product view: move further back so model is visible
   const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
-  camera.position.set(0, 1, 3);
-
-  // Renderer
+  camera.position.set(0, 0, 5);
+  
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-  // Orbit Controls
+  
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.minDistance = 1.5;
-  controls.maxDistance = 4;
-
+  controls.maxDistance = 6;
+  
   // Lighting
   const light = new THREE.DirectionalLight(0xffffff, 2);
   light.position.set(2, 2, 2);
   scene.add(light);
-
-  // OPTIONAL: Add a faint ambient light
+  
   const ambient = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambient);
-
-  // Add a small test box so we can confirm the scene is working
+  
+  // Add a small test box to confirm the scene (red cube)
   const testGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
   const testMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const testBox = new THREE.Mesh(testGeo, testMat);
   testBox.position.set(-1, 0, 0);
   scene.add(testBox);
-
-  // Load the texture for this carpet
-  const texIndex = i - 1; 
+  
+  // Load the texture for this product carpet
+  const texIndex = i - 1;
   const texture = TEXTURES[texIndex] || TEXTURES[0];
-
-  // Load OBJ
+  
   const loader = new OBJLoader();
   loader.load(
     './assets/Doormate.obj',
     (obj) => {
       console.log(`Product carpet ${i} OBJ loaded successfully.`);
-      // Scale for a 220x220 card
+      
+      // Center the model
+      const box = new THREE.Box3().setFromObject(obj);
+      const center = box.getCenter(new THREE.Vector3());
+      obj.position.sub(center);
+      
+      // Adjust scale for product view (tweak if needed)
       obj.scale.set(1.0, 1.0, 1.0);
-
-      // Apply texture
+      
+      // Apply the product texture
       obj.traverse((child) => {
         if (child.isMesh) {
           child.material = new THREE.MeshStandardMaterial({
@@ -195,17 +195,16 @@ function createCarpetViewer(i) {
           });
         }
       });
-
+      
       scene.add(obj);
-      multiViewers[i - 1].model = obj; // store reference
+      multiViewers[i - 1].model = obj;
     },
     undefined,
     (error) => {
       console.error(`Error loading Product OBJ #${i}:`, error);
     }
   );
-
-  // Store the viewer
+  
   multiViewers[i - 1] = {
     scene,
     camera,
@@ -217,7 +216,6 @@ function createCarpetViewer(i) {
 
 /* -------------------------------------------------
    3) SHOW/HIDE VIEWS
-   - We'll toggle #home-view and #products-view
 ---------------------------------------------------*/
 window.showHome = function() {
   document.getElementById('products-view').style.display = 'none';
@@ -227,32 +225,35 @@ window.showHome = function() {
 window.showProducts = function() {
   document.getElementById('home-view').style.display = 'none';
   document.getElementById('products-view').style.display = 'block';
+  
+  // Force update each product canvas after it's visible
+  multiViewers.forEach((viewer, i) => {
+    const canvas = document.getElementById(`carpetCanvas${i + 1}`);
+    if (canvas) {
+      viewer.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      viewer.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      viewer.camera.updateProjectionMatrix();
+    }
+  });
 };
 
 /* -------------------------------------------------
-   4) ANIMATION LOOP
-   - Render the single carpet
-   - Render each of the 4 carpets
-   - Rotate them slowly
+   4) ANIMATION LOOP (Static Models)
 ---------------------------------------------------*/
 function animate() {
   requestAnimationFrame(animate);
-
-  // SINGLE CARPET
+  
+  // Render Home view
   if (homeScene && homeRenderer && homeControls) {
     homeControls.update();
     homeRenderer.render(homeScene, homeCamera);
   }
-
-  // MULTI CARPETS
+  
+  // Render each product view (static; no rotation added)
   multiViewers.forEach((viewer) => {
     if (!viewer) return;
-    const { scene, camera, renderer, controls, model } = viewer;
-    if (model) {
-      model.rotation.y += 0.01; // rotate the carpet
-    }
-    controls.update();
-    renderer.render(scene, camera);
+    viewer.controls.update();
+    viewer.renderer.render(viewer.scene, viewer.camera);
   });
 }
 animate();
@@ -261,22 +262,22 @@ animate();
    5) RESIZE HANDLING
 ---------------------------------------------------*/
 window.addEventListener('resize', () => {
-  // Home view
-  if (homeCamera && homeRenderer) {
-    const canvas = document.getElementById('home-canvas');
-    homeCamera.aspect = canvas.clientWidth / canvas.clientHeight;
+  // Home view resize
+  const homeCanvas = document.getElementById('home-canvas');
+  if (homeCamera && homeRenderer && homeCanvas) {
+    homeCamera.aspect = homeCanvas.clientWidth / homeCanvas.clientHeight;
     homeCamera.updateProjectionMatrix();
-    homeRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    homeRenderer.setSize(homeCanvas.clientWidth, homeCanvas.clientHeight);
   }
-
-  // Product carpets
+  
+  // Products view resize
   multiViewers.forEach((viewer, i) => {
-    if (!viewer) return;
     const canvas = document.getElementById(`carpetCanvas${i + 1}`);
-    if (!canvas) return;
-    viewer.camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    viewer.camera.updateProjectionMatrix();
-    viewer.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    if (viewer && canvas) {
+      viewer.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      viewer.camera.updateProjectionMatrix();
+      viewer.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    }
   });
 });
 
@@ -286,7 +287,6 @@ window.addEventListener('resize', () => {
 initHomeScene();
 initProductsScene();
 
-// Add-to-cart button (single view)
 const addToCartBtn = document.getElementById('add-to-cart');
 if (addToCartBtn) {
   addToCartBtn.addEventListener('click', () => {
